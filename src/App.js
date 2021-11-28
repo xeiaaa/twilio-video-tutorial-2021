@@ -3,7 +3,6 @@ import { getToken } from './helpers'
 import { connect } from 'twilio-video'
 import { VideoRoomMonitor } from '@twilio/video-room-monitor'
 
-const IDENTITY = 'USER_1'
 const ROOM_NAME = 'DEFAULT_ROOM'
 
 function App() {
@@ -11,7 +10,12 @@ function App() {
   useEffect(() => {
     const init = async () => {
       try {
-        const result = await getToken(IDENTITY)
+        // Get Identity from query param
+        const queryParams = window.location.search;
+        const identity = new URLSearchParams(queryParams).get('identity');
+        console.log('Identity:', identity)
+
+        const result = await getToken(identity)
         console.log('Access Token:', result.data.accessToken)
 
         const room = await connect(result.data.accessToken, { name: ROOM_NAME, tracks: [] })
