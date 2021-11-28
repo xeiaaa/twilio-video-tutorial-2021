@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { getToken } from './helpers'
+import { connect } from 'twilio-video'
 
 const IDENTITY = 'USER_1'
+const ROOM_NAME = 'DEFAULT_ROOM'
 
 function App() {
 
@@ -10,7 +11,10 @@ function App() {
     const init = async () => {
       try {
         const result = await getToken(IDENTITY)
-        console.log(result)
+        console.log('Access Token:', result.data.accessToken)
+
+        const room = await connect(result.data.accessToken, { name: ROOM_NAME })
+        console.log('Twilio Room Instance:', room)
       } catch (err) {
         console.log(err)
       }
